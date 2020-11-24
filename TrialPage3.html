@@ -1,0 +1,412 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>Trial page take 2</title>
+    <meta name="description" content="Page created by Arek Pawlik to showcase his abilities in creating responsive websites, using HTML, JS, CSS and PHP" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="libs/images/favicon.ico" />
+    <link rel="stylesheet" type="text/css" href="libs/css/preloader.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+          integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+          crossorigin="" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <link rel="stylesheet" type="text/css" href="libs/css/trialPage3.css" />
+   
+</head>
+<body onload="getLocation()">
+
+    <!--preloader-->
+    <div id="preloader"></div>
+
+    <div class="jumbotron" id="banner">
+        <a class="navbar-brand jumbo"><img id="logoImg" src="libs/images/logo.png" /></a>
+        <h3 class="jumbo logoTitle">Gazetteer</h3>
+    </div>
+    <!-- bg-primary, bg-succes, bg-warning, bg-info, bg-primary-->
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark sticky-top">
+
+        <button class="navbar-toggler" data-toggle="collapse" data-target="#collapse_target">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <select id="countries"></select>
+
+        <div class="collapse navbar-collapse" id="collapse_target">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="#mapid" data-toggle="modal" data-target="#myModalInfo">Country info</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#weatherResults" data-toggle="modal" data-target="#myModalWeather">Weather</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#exchangeResults" data-toggle="modal" data-target="#myModalEX">Exchange</a>
+                </li>
+            </ul>
+        </div>
+
+    </nav>
+
+    <!-- initial geolocation test -->
+    <section class="container bgData">
+        <h2>Geolocation</h2>
+
+        <table>
+            <tr>
+                <td class="geoDescription" id="latDescription"></td>
+                <td class="geoDescription" id="latitude"></td>
+            </tr>
+            <tr>
+                <td class="geoDescription" id="lngDescription"></td>
+                <td class="geoDescription" id="longitude"></td>
+            </tr>
+        </table>
+
+    </section>
+
+
+    <!--Map test-->
+    <div class="mapContainer">
+        <div id="mapid"></div>
+    </div>
+
+    <!--ReverseOpenCage-->
+
+    <section id="openCageSection" class="bgData">
+
+        <div id="reverseOpenCageDisplay">
+            <h2>Reverse OpenCage</h2>
+            <table>
+
+                <tr>
+                    <td align="right">
+                        Continent:
+                    </td>
+                    <td id="reverseOpenCageContinent">
+                    </td>
+
+                </tr>
+
+                <tr>
+                    <td align="right">
+                        Country:
+                    </td>
+                    <td id="reverseOpenCageCountry">
+                    </td>
+
+                </tr>
+
+                <tr>
+                    <td align="right">
+                        Country Alpha3 code:
+                    </td>
+                    <td id="reverseOpenCageCountryAlpha3Code">
+                    </td>
+
+                </tr>
+
+                <tr>
+                    <td align="right">
+                        City:
+                    </td>
+                    <td id="reverseOpenCageCity">
+                    </td>
+
+                </tr>
+
+                <tr>
+                    <td align="right">
+                        Calling Code:
+                    </td>
+                    <td id="reverseOpenCageCallingCode">
+                    </td>
+
+                </tr>
+
+                <tr>
+                    <td align="right">
+                        Currency:
+                    </td>
+                    <td id="reverseOpenCageCurrency">
+                    </td>
+
+                </tr>
+
+                <tr>
+                    <td align="right">
+                        Annotation:
+                    </td>
+                    <td id="reverseOpenCageAnnotation">
+                    </td>
+
+                </tr>
+
+                <tr>
+                    <td align="right">
+                        ISO Code:
+                    </td>
+                    <td id="reverseOpenCageIsoCode">
+                    </td>
+
+                </tr>
+
+            </table>
+
+        </div>
+
+        <!--ForwardOpenCage-->
+
+        <div id="forwardOpenCageDisplay" class="bgData">
+            <h2>Forward OpenCage</h2>
+            <table>
+
+                <tr>
+                    <td align="right">
+                        Continent:
+                    </td>
+                    <td id="forwardOpenCageContinent">
+                    </td>
+
+                </tr>
+
+                <tr>
+                    <td align="right">
+                        Calling Code:
+                    </td>
+                    <td id="forwardOpenCageCallingCode">
+                    </td>
+
+                </tr>
+
+                <tr>
+                    <td align="right">
+                        Currency:
+                    </td>
+                    <td id="forwardOpenCageCurrency">
+                    </td>
+
+                </tr>
+
+                <tr>
+                    <td align="right">
+                        Annotation:
+                    </td>
+                    <td id="forwardOpenCageAnnotation">
+                    </td>
+
+                </tr>
+
+                <tr>
+                    <td align="right">
+                        ISO Code:
+                    </td>
+                    <td id="forwardOpenCageIsoCode">
+                    </td>
+
+                </tr>
+
+                <tr>
+                    <td align="right">
+                        Latitude:
+                    </td>
+                    <td id="forwardOpenCageLat">
+                    </td>
+
+                </tr>
+
+                <tr>
+                    <td align="right">
+                        Longitude:
+                    </td>
+                    <td id="forwardOpenCageLng">
+                    </td>
+
+                </tr>
+
+            </table>
+
+        </div>
+
+    </section>
+
+    <!--Rest-->
+
+    <div id="myModalInfo" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Country information for <span id="countryInfoTitle"></span></h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div id="flag-container">
+                        <img src="" alt="" height="200" width="300">
+                    </div>
+                    <div id="info-container">
+                        <p>Capital: <span id="capital"></span></p>
+                        <p>Dialing Code: <span id="dialing-code"></span></p>
+                        <p>Population: <span id="population"></span></p>
+                        <p>Currencies: <span id="currencies"></span></p>
+                        <p>Region: <span id="region"></span></p>
+                        <p>Subregion: <span id="subregion"></span></p>
+                        <p>Sovereignity: <span id="forwardOpenCageSovereign"></span></p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!--Weather-->
+    <!-- Modal -->
+    <div id="myModalWeather" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 id="weatherModalTitle" class="modal-title">Weather for <span id="weatherCity" class="modal-title"></span> </h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <section id="weatherResults">
+
+                        <div>
+
+                            <img id="weatherIcon" />
+
+                            <table>
+
+                                <tr>
+                                    <td align="right">
+                                        Temperature:
+                                    </td>
+                                    <td class="temp" id="txtTemp">
+                                    </td>
+
+                                </tr>
+
+                                <tr>
+                                    <td align="right">
+                                        Feels like:
+                                    </td>
+                                    <td class="temp" id="txtFeelsLike">
+                                    </td>
+
+                                </tr>
+
+                                <tr>
+                                    <td align="right">
+                                        Min temperature:
+                                    </td>
+                                    <td class="temp" id="txtTempMin">
+                                    </td>
+
+                                </tr>
+
+                                <tr>
+                                    <td align="right">
+                                        Max temperature:
+                                    </td>
+                                    <td class="temp" id="txtTempMax">
+                                    </td>
+
+                                </tr>
+
+                                <tr>
+                                    <td align="right">
+                                        Air pressure:
+                                    </td>
+                                    <td class="pressure" id="txtPressure">
+                                    </td>
+
+                                </tr>
+                                <tr>
+                                    <td align="right">
+                                        Humidity:
+                                    </td>
+                                    <td class="humid" id="txtHumidity">
+                                    </td>
+
+                                </tr>
+                                <tr>
+                                    <td align="right">
+                                        Wind speed:
+                                    </td>
+                                    <td class="speedM" id="txtWindSpeed">
+                                    </td>
+
+                                </tr>
+                                <tr>
+                                    <td align="right">
+                                        Wind direction:
+                                    </td>
+                                    <td id="txtWindDirection" height="20px" width="20px">
+                                        <div id="windContainer" height="20px" width="20px">
+                                            <img id="windDirection" src="libs/images/wind.png" />
+                                        </div>
+                                    </td>
+
+                                </tr>
+
+                            </table>
+
+                        </div>
+                    </section>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+
+
+    <!--Exchange-->
+
+    <div id="myModalEX" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content contentEX">
+                <div class="modal-header">
+                    <h4 id="exchangeModalTitle" class="modal-title">ForEx details for <span id="baseCurrency" class="modal-title"></span></h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div id="txtExchange">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</body>
+
+<!-- JavaScript -->
+
+<script type="application/javascript" src="libs/js/preloader.js"></script>
+<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+        integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+        crossorigin=""></script>
+<script src="libs\vendors\leaflet-providers.js"></script>
+<script type="application/javascript" src="libs/vendors/jquery-2.2.3.min.js"></script>
+<script type="application/javascript" src="libs/js/trialPage3.js"></script>
+</html>
