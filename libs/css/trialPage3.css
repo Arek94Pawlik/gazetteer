@@ -1,4 +1,4 @@
-﻿body {
+body {
     padding: 0;
     margin: 0;
 }
@@ -22,16 +22,57 @@ html, body, .mapContainer {
 .jumbotron {
     margin-bottom: 0px;
     padding: 0px;
+    background: linear-gradient(to bottom, #5bc0de, #4ed986, #28a745);
+}
+
+.navbar-toggler .navbar-toggler-icon {
+    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgb(69,39,19)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 8h24M4 16h24M4 24h24'/%3E%3C/svg%3E");
+}
+
+.navbar-toggler.navbar-toggler {
+    border-color: #452713;
 }
 
 .navbar-brand {
     width: 128px;
 }
 
+.nav-link {
+    font-family: 'Indie Flower', cursive;
+    font-size: 1.5rem;
+    color: #452713;
+}
+
+.nav-link:hover {
+    color: #2a542c;
+    font-weight: 600;
+}
+
+
+
+.modal-header .close {
+    font-size: 4rem;
+    padding: 0 16px 0 16px;
+}
+
+.modal-content {
+    font-family: 'Indie Flower', cursive;
+    color: #452713;
+    background-image: linear-gradient(to bottom, #ffffff, #5bc0de, #4ed986, #28a745)
+}
+
+.modal-body {
+    font-size: 1.3rem;
+}
+
 .jumbo {
     margin: 0px;
     display: inline-block;
     padding: 0;
+}
+
+#flag-container {
+    text-align: center;
 }
 
 #logoImg {
@@ -43,6 +84,9 @@ html, body, .mapContainer {
 .logoTitle {
     padding-bottom: 30px;
     vertical-align: bottom;
+    font-size: 2rem;
+    font-family: 'Texturina', serif;
+    color: #452713;
 }
 
 .bgData {
@@ -64,6 +108,17 @@ html, body, .mapContainer {
 .contentEX {
     max-height: 70vh;
     overflow-y: scroll;
+}
+
+#weather-icon-container {
+    text-align: center;
+}
+
+#weather-icon-container img {
+    border: 1px solid #b6ff00;
+    border-radius: 50%;
+    padding: 10px;
+    box-shadow: 10px -5px #b6ff00;
 }
 
 @media screen and (min-width: 481px) {
