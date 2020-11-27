@@ -1,13 +1,15 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="utf-8" />
-    <title>Trial page take 2</title>
+    <title>Gazetteer</title>
     <meta name="description" content="Page created by Arek Pawlik to showcase his abilities in creating responsive websites, using HTML, JS, CSS and PHP" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" href="libs/images/favicon.ico" />
     <link rel="stylesheet" type="text/css" href="libs/css/preloader.css" />
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Indie+Flower&family=Texturina:ital,wght@1,600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
           integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
           crossorigin="" />
@@ -16,7 +18,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <link rel="stylesheet" type="text/css" href="libs/css/trialPage3.css" />
-   
+
 </head>
 <body onload="getLocation()">
 
@@ -24,11 +26,11 @@
     <div id="preloader"></div>
 
     <div class="jumbotron" id="banner">
-        <a class="navbar-brand jumbo"><img id="logoImg" src="libs/images/logo.png" /></a>
+        <a class="navbar-brand jumbo" href="https://www.apawlik.co.uk" target="_blank"><img id="logoImg" src="libs/images/logo.png" /></a>
         <h3 class="jumbo logoTitle">Gazetteer</h3>
     </div>
     <!-- bg-primary, bg-succes, bg-warning, bg-info, bg-primary-->
-    <nav class="navbar navbar-expand-md navbar-dark bg-dark sticky-top">
+    <nav class="navbar navbar-expand-md navbar-success bg-success sticky-top">
 
         <button class="navbar-toggler" data-toggle="collapse" data-target="#collapse_target">
             <span class="navbar-toggler-icon"></span>
@@ -249,6 +251,7 @@
                     <div id="flag-container">
                         <img src="" alt="" height="200" width="300">
                     </div>
+                    <br />
                     <div id="info-container">
                         <p>Capital: <span id="capital"></span></p>
                         <p>Dialing Code: <span id="dialing-code"></span></p>
@@ -260,7 +263,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
                 </div>
             </div>
 
@@ -275,16 +278,17 @@
             <!-- Modal content-->
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 id="weatherModalTitle" class="modal-title">Weather for <span id="weatherCity" class="modal-title"></span> </h4>
+                    <h4 id="weatherModalTitle" class="modal-title">Weather for <span id="weatherCity" class="modal-title"></span>, <span id="weatherCountry" class="modal-title"> </h4>
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
                 <div class="modal-body">
                     <section id="weatherResults">
 
                         <div>
-
-                            <img id="weatherIcon" />
-
+                            <div id="weather-icon-container">
+                                <img id="weatherIcon" />
+                            </div>
+                            
                             <table>
 
                                 <tr>
@@ -365,7 +369,7 @@
                     </section>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
                 </div>
             </div>
 
@@ -381,17 +385,17 @@
         <div class="modal-dialog">
 
             <!-- Modal content-->
-            <div class="modal-content contentEX">
+            <div class="modal-content">
                 <div class="modal-header">
                     <h4 id="exchangeModalTitle" class="modal-title">ForEx details for <span id="baseCurrency" class="modal-title"></span></h4>
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body contentEX">
                     <div id="txtExchange">
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
                 </div>
             </div>
 
