@@ -66,10 +66,10 @@ function showError(error) {
 function buildMap(lat, lng, iso_code3, bounds) {
 	console.log('mapBuilder1');
 	console.log(iso_code3);
-	document.getElementById('mapid').innerHTML = "<div id='map' style='width: 100%; height: 100%;'></div>";
+	$('#mapid').html("<div id='map' style='width: 100%; height: 100%;'></div>");
 	var exampleCountry = 'United Kingdom';
-	var osmUrl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-		osmAttribution = 'Map data © <a href="http://openstreetmap.org">OpenStreetMap</a> contributors,',
+	var osmUrl = 'https://stamen-tiles-{s}.a.ssl.fastly.net/terrain/{z}/{x}/{y}{r}.png',
+		osmAttribution = 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> & mdash; Map data & copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
 		osmLayer = new L.TileLayer(osmUrl, { maxZoom: 18, attribution: osmAttribution });
 
 	var countries = $.ajax({
@@ -501,6 +501,7 @@ function weatherUpdate(city) {
 				} else {
 					$('#weatherResults').css({ 'display': 'initial' });
 					$('#weatherCity').html(result['data']['name']);
+					$('#weatherCountry').html(result['data']['sys']['country']);
 					$('#weatherIcon').attr("src", "http://openweathermap.org/img/wn/" + result['data']['weather'][0]['icon'] + ".png");
 					$('#txtTemp').html((k2c(result['data']['main']['temp'])).toFixed(2) + "\&degC");
 					$('#txtFeelsLike').html((k2c(result['data']['main']['feels_like'])).toFixed(2) + "\&degC");
