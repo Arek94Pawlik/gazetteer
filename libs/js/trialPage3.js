@@ -106,40 +106,40 @@ function buildMap(lat, lng, iso_code3, bounds) {
 			if (feature.properties.iso_a3 === iso_code3) return true
 		}
 
-		var places = getLandmarks(lat, lng);
+		//var places = getLandmarks(lat, lng);
 
-		function getLandmarks(lat, lng) {
+		//function getLandmarks(lat, lng) {
 
-			console.log("amadeus1");
+		//	console.log("amadeus1");
 
-			$.ajax({
-				url: "libs/php/amadeusToken2.php",
-				type: 'POST',
-				dataType: 'json',
-				data: {
-					latitude: lat,
-					longitude: lng
-				},
+		//	$.ajax({
+		//		url: "libs/php/amadeusToken2.php",
+		//		type: 'POST',
+		//		dataType: 'json',
+		//		data: {
+		//			latitude: lat,
+		//			longitude: lng
+		//		},
 
-				success: function (result) {
+		//		success: function (result) {
 
-					console.log("amadeus2");
-					console.log(result);
+		//			console.log("amadeus2");
+		//			console.log(result);
 
-					landmarks = result['data'];
-					console.log(result['data']);
+		//			landmarks = result['data'];
+		//			console.log(result['data']);
 
-					landmarks.forEach(landmark => L.marker([landmark.geoCode.latitude, landmark.geoCode.longitude]).addTo(map).bindPopup(landmark.name));
+		//			landmarks.forEach(landmark => L.marker([landmark.geoCode.latitude, landmark.geoCode.longitude]).addTo(map).bindPopup(landmark.name));
 
-				},
-				error: function (jqXHR, textStatus, errorThrown) {
-					console.log(jqXHR);
-					console.log(textStatus);
-					console.log(errorThrown);
-				}
-			});
+		//		},
+		//		error: function (jqXHR, textStatus, errorThrown) {
+		//			console.log(jqXHR);
+		//			console.log(textStatus);
+		//			console.log(errorThrown);
+		//		}
+		//	});
 
-		}
+		//}
 	});
 
 
