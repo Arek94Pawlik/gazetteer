@@ -3,9 +3,17 @@ body {
     margin: 0;
 }
 
-html, body, .mapContainer {
+html, body {
     height: 100%;
     width: 100vw;
+}
+
+.mapContainer {
+    position: absolute;
+    top: 165.6px;
+    right: 0;
+    bottom: 0;
+    left: 0;
 }
 
 #mapid {
@@ -126,3 +134,14 @@ html, body, .mapContainer {
         display: inline;
     }
 }
+
+@media screen and (min-width: 768px) {
+    .mapContainer {
+        position: absolute;
+        top: 177.6px;
+        right: 0;
+        bottom: 0;
+        left: 0;
+    }
+}
+
