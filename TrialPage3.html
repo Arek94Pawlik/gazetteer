@@ -10,33 +10,31 @@
     <link rel="stylesheet" type="text/css" href="libs/css/preloader.css" />
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Indie+Flower&family=Texturina:ital,wght@1,600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
-          integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
-          crossorigin="" />
+    <link rel="stylesheet" href="libs/leaflet/leaflet.css" />
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-    <link rel="stylesheet" type="text/css" href="libs/css/trialPage3.css" />
+    <link rel="stylesheet" type="text/css" href="libs/css/trialPage4.css" />
 
 </head>
-<body onload="getLocation()">
+<body>
 
-    <!--preloader-->
+    <!-- preloader -->
     <div id="preloader"></div>
 
+    <!-- Banner -->
     <div class="jumbotron" id="banner">
         <a class="navbar-brand jumbo" href="https://www.apawlik.co.uk" target="_blank"><img id="logoImg" src="libs/images/logo.png" /></a>
         <h3 class="jumbo logoTitle">Gazetteer</h3>
     </div>
-    <!-- bg-primary, bg-succes, bg-warning, bg-info, bg-primary-->
+
+    <!-- Navigation -->
+
     <nav class="navbar navbar-expand-md navbar-success bg-success sticky-top">
 
         <button class="navbar-toggler" data-toggle="collapse" data-target="#collapse_target">
             <span class="navbar-toggler-icon"></span>
         </button>
 
-        <select id="countries"></select>
+        <select class="browser-default custom-select" id="countries"></select>
 
         <div class="collapse navbar-collapse" id="collapse_target">
             <ul class="navbar-nav">
@@ -54,7 +52,7 @@
 
     </nav>
 
-    <!-- initial geolocation test -->
+    <!-- initial geolocation -->
     <section class="container bgData">
         <h2>Geolocation</h2>
 
@@ -71,173 +69,13 @@
 
     </section>
 
-
-    <!--Map test-->
+    <!-- Map -->
     <div class="mapContainer">
         <div id="mapid"></div>
     </div>
 
-    <!--ReverseOpenCage-->
 
-    <section id="openCageSection" class="bgData">
-
-        <div id="reverseOpenCageDisplay">
-            <h2>Reverse OpenCage</h2>
-            <table>
-
-                <tr>
-                    <td align="right">
-                        Continent:
-                    </td>
-                    <td id="reverseOpenCageContinent">
-                    </td>
-
-                </tr>
-
-                <tr>
-                    <td align="right">
-                        Country:
-                    </td>
-                    <td id="reverseOpenCageCountry">
-                    </td>
-
-                </tr>
-
-                <tr>
-                    <td align="right">
-                        Country Alpha3 code:
-                    </td>
-                    <td id="reverseOpenCageCountryAlpha3Code">
-                    </td>
-
-                </tr>
-
-                <tr>
-                    <td align="right">
-                        City:
-                    </td>
-                    <td id="reverseOpenCageCity">
-                    </td>
-
-                </tr>
-
-                <tr>
-                    <td align="right">
-                        Calling Code:
-                    </td>
-                    <td id="reverseOpenCageCallingCode">
-                    </td>
-
-                </tr>
-
-                <tr>
-                    <td align="right">
-                        Currency:
-                    </td>
-                    <td id="reverseOpenCageCurrency">
-                    </td>
-
-                </tr>
-
-                <tr>
-                    <td align="right">
-                        Annotation:
-                    </td>
-                    <td id="reverseOpenCageAnnotation">
-                    </td>
-
-                </tr>
-
-                <tr>
-                    <td align="right">
-                        ISO Code:
-                    </td>
-                    <td id="reverseOpenCageIsoCode">
-                    </td>
-
-                </tr>
-
-            </table>
-
-        </div>
-
-        <!--ForwardOpenCage-->
-
-        <div id="forwardOpenCageDisplay" class="bgData">
-            <h2>Forward OpenCage</h2>
-            <table>
-
-                <tr>
-                    <td align="right">
-                        Continent:
-                    </td>
-                    <td id="forwardOpenCageContinent">
-                    </td>
-
-                </tr>
-
-                <tr>
-                    <td align="right">
-                        Calling Code:
-                    </td>
-                    <td id="forwardOpenCageCallingCode">
-                    </td>
-
-                </tr>
-
-                <tr>
-                    <td align="right">
-                        Currency:
-                    </td>
-                    <td id="forwardOpenCageCurrency">
-                    </td>
-
-                </tr>
-
-                <tr>
-                    <td align="right">
-                        Annotation:
-                    </td>
-                    <td id="forwardOpenCageAnnotation">
-                    </td>
-
-                </tr>
-
-                <tr>
-                    <td align="right">
-                        ISO Code:
-                    </td>
-                    <td id="forwardOpenCageIsoCode">
-                    </td>
-
-                </tr>
-
-                <tr>
-                    <td align="right">
-                        Latitude:
-                    </td>
-                    <td id="forwardOpenCageLat">
-                    </td>
-
-                </tr>
-
-                <tr>
-                    <td align="right">
-                        Longitude:
-                    </td>
-                    <td id="forwardOpenCageLng">
-                    </td>
-
-                </tr>
-
-            </table>
-
-        </div>
-
-    </section>
-
-    <!--Rest-->
-
+    <!--Country Info Modal-->
     <div id="myModalInfo" class="modal fade" role="dialog">
         <div class="modal-dialog">
 
@@ -259,7 +97,7 @@
                         <p>Currencies: <span id="currencies"></span></p>
                         <p>Region: <span id="region"></span></p>
                         <p>Subregion: <span id="subregion"></span></p>
-                        <p>Sovereignity: <span id="forwardOpenCageSovereign"></span></p>
+                        <!--<p>Sovereignity: <span id="forwardOpenCageSovereign"></span></p>-->
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -270,8 +108,7 @@
         </div>
     </div>
 
-    <!--Weather-->
-    <!-- Modal -->
+    <!-- Weather Modal -->
     <div id="myModalWeather" class="modal fade" role="dialog">
         <div class="modal-dialog">
 
@@ -288,7 +125,7 @@
                             <div id="weather-icon-container">
                                 <img id="weatherIcon" />
                             </div>
-                            
+
                             <table>
 
                                 <tr>
@@ -376,11 +213,7 @@
         </div>
     </div>
 
-
-
-
-    <!--Exchange-->
-
+    <!--Exchange modal-->
     <div id="myModalEX" class="modal fade" role="dialog">
         <div class="modal-dialog">
 
@@ -402,15 +235,17 @@
         </div>
     </div>
 
+
+    <!-- JavaScript -->
+
+
+    <script type="application/javascript" src="libs/vendors/jquery-2.2.3.min.js"></script>
+    <script type="application/javascript" src="libs/js/preloader.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="libs/leaflet/leaflet.js"></script>
+    <script src="libs\vendors\leaflet-providers.js"></script>
+    <script type="application/javascript" src="libs/js/trialPage4.js"></script>
+
 </body>
-
-<!-- JavaScript -->
-
-<script type="application/javascript" src="libs/js/preloader.js"></script>
-<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
-        integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
-        crossorigin=""></script>
-<script src="libs\vendors\leaflet-providers.js"></script>
-<script type="application/javascript" src="libs/vendors/jquery-2.2.3.min.js"></script>
-<script type="application/javascript" src="libs/js/trialPage3.js"></script>
 </html>
