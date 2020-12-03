@@ -51,10 +51,10 @@ html, body {
     color: #452713;
 }
 
-.nav-link:hover {
-    color: #2a542c;
-    font-weight: 600;
-}
+    .nav-link:hover {
+        color: #2a542c;
+        font-weight: 600;
+    }
 
 
 
@@ -97,16 +97,8 @@ html, body {
     color: #452713;
 }
 
-.bgData {
-    display: none;
-}
-
 #countries {
     max-width: 200px;
-}
-
-#countryPickerCaption {
-    margin-right: 5px;
 }
 
 .rwd-line {
@@ -122,12 +114,12 @@ html, body {
     text-align: center;
 }
 
-#weather-icon-container img {
-    border: 1px solid #b6ff00;
-    border-radius: 50%;
-    padding: 10px;
-    box-shadow: 10px -5px #b6ff00;
-}
+    #weather-icon-container img {
+        border: 1px solid #b6ff00;
+        border-radius: 50%;
+        padding: 10px;
+        box-shadow: 10px -5px #b6ff00;
+    }
 
 @media screen and (min-width: 481px) {
     .rwd-line {
@@ -144,4 +136,3 @@ html, body {
         left: 0;
     }
 }
-
