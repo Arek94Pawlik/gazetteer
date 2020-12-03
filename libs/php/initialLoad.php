@@ -5,7 +5,7 @@
 	//ReverseOpenCage API call
 
 
-	$openCageAPIkey = '27ad0097cbd641ac9916eb4cf9556982';
+	$openCageAPIkey = '<<APIKEY>>';
 	
 	$urlOpenCage='https://api.opencagedata.com/geocode/v1/json?q=' . $_REQUEST{'LAT'} . '+' . $_REQUEST{'LNG'} . '&key=' . $openCageAPIkey;
 
@@ -42,7 +42,7 @@
 
 	//weather API call
 
-	$weatherAPIkey ='58c7d3b28da61d3cffebdce2d94f9acb';
+	$weatherAPIkey ='<<APIKEY>>';
 	
 	$urlWeather='api.openweathermap.org/data/2.5/weather?q=' . $revOpenCageCity . '&appid='.$weatherAPIkey;
 	
@@ -59,7 +59,7 @@
 	
 	//exchange API call
 
-	$exchangeAPIkey='76de83d1d5fb4e919d1e0d10e220bb7a';
+	$exchangeAPIkey='<<APIKEY>>';
 
 	$urlExchange='https://openexchangerates.org/api/latest.json?app_id='.$exchangeAPIkey;
 
