@@ -61,8 +61,6 @@ function definePosition(position) {
 //Geolocation position display
 
 function showPosition(lat, lng) {
-	console.log("show1");
-	console.log(latitude + " and " + longitude);
 	latDesc.innerHTML = "Latitude: ";
 	latValue.innerHTML = lat;
 	lngDesc.innerHTML = "<br>Longitude: ";
@@ -105,32 +103,84 @@ var bounds = null;
 
 //position map and marker
 
-function mapPosition(lat, lng) {
+function mapPosition(lat, lng, city) {
 
-	console.log("mapPosition1");
+	var extraMarker = L.ExtraMarkers.icon({
+		shape: 'star',
+		markerColor: 'violet',
+	});
+
 
 	map.addLayer(osmLayer);
 	map.setView(new L.LatLng(lat, lng), 4);
 
 	if (marker != null) {
-		console.log("mapPosition2");
 		map.removeLayer(marker);
 	};
 
-	marker = L.marker([lat, lng]).addTo(map);
-
+	marker = L.marker([lat, lng], { icon: extraMarker }).addTo(map);
+	marker.bindPopup("Welcome to " + city + "!").openPopup();
 }
 
 //add borders and fit bounds
 
-function borderBounds(object) {
+function borderBounds(object, region) {
 
 	if (theCountry != null) {
-		console.log("mapPosition2");
 		map.removeLayer(theCountry);
 	};
 
-	theCountry = L.geoJson(object).addTo(map);
+	var boundsStyle = {};
+
+	switch (region) {
+		case "Europe":
+			boundsStyle = {
+				fillColor: "#6369ff",
+				color: "#0000ff",
+				weight: 3,
+				opacity: 1,
+				fillOpacity: 0.6
+			};
+			break;
+		case "Asia":
+			boundsStyle = {
+				fillColor: "#f7fa52", 
+				color: "#f8fc00",
+				weight: 3,
+				opacity: 1,
+				fillOpacity: 0.6
+			};
+			break;
+		case "Africa":
+			boundsStyle = {
+				fillColor: "#ffae45",
+				color: "#ff9100",
+				weight: 3,
+				opacity: 1,
+				fillOpacity: 0.6
+			};
+			break;
+		case "Americas":
+			boundsStyle = {
+				fillColor: "#36db32",
+				color: "#00ff00",
+				weight: 3,
+				opacity: 1,
+				fillOpacity: 0.6
+			};
+			break;
+		case "Oceania":
+			boundsStyle = {
+				fillColor: "#f54949",
+				color: "#ff0000",
+				weight: 3,
+				opacity: 1,
+				fillOpacity: 0.6
+			};
+			break;
+    }
+
+	theCountry = L.geoJson(object, boundsStyle).addTo(map);
 
 	bounds = theCountry.getBounds();
 
@@ -143,8 +193,6 @@ function borderBounds(object) {
 $("#countries").on("change", newCountrySelection);
 
 function newCountrySelection(event) {
-	console.log("select1");
-	console.log(event.target.value);
 	selectDisplay(event.target.value);
 }
 
@@ -152,7 +200,6 @@ function newCountrySelection(event) {
 
 function initialDisplay(lat, lng) {
 
-	console.log("initialLoad1");
 
 	$.ajax({
 		url: "libs/php/initialLoad.php",
@@ -164,19 +211,21 @@ function initialDisplay(lat, lng) {
 		},
 		success: function (result) {
 
-			console.log("initialLoad2");
-
 			if (result) {
-
-				console.log("initialLoad3");
 
 				displayInfo(result);
 
             }
 
-			mapPosition(lat, lng);
-			borderBounds(result.data.GeoBordersData);
-			console.log("initialLoad4");
+			let currentSelector = result.data.restCountries.alpha3Code;
+			let currentCity = result.data.revOpenCage[0].components.city;
+
+			let region = result.data.restCountries.region;
+
+			$('#countries option[value=' + currentSelector + ']').attr('selected', 'selected');
+			
+			mapPosition(lat, lng, currentCity);
+			borderBounds(result.data.GeoBordersData, region);
 		},
 		error: function (jqXHR, textStatus, errorThrown) {
 			console.log(jqXHR);
@@ -190,9 +239,6 @@ function initialDisplay(lat, lng) {
 
 function selectDisplay(isoCode) {
 
-	console.log("selectLoad1");
-	console.log(isoCode);
-
 	$.ajax({
 		url: "libs/php/selectLoad.php",
 		type: 'POST',
@@ -202,20 +248,20 @@ function selectDisplay(isoCode) {
 		},
 		success: function (result) {
 
-			console.log("selectLoad2");
-
 			if (result) {
 
-				console.log("selectLoad3");
-
 				displayInfo(result);
-				let latlng = result.data.restCountries.latlng;
-				mapPosition(latlng[0], latlng[1]);
-				borderBounds(result.data.GeoBordersData);
+				let latlng = result.data.ForwardOpenCage.results[0].geometry;
+				let city = result.data.restCountries.capital;
+				console.log(latlng);
+				console.log(latlng['lat']);
+				console.log(latlng['lng']);
+				console.log(city);
+				mapPosition(latlng['lat'], latlng['lng'], city);
+				let region = result.data.restCountries.region;
+				borderBounds(result.data.GeoBordersData, region);
 			}
 
-			
-			console.log("selectLoad4");
 		},
 		error: function (jqXHR, textStatus, errorThrown) {
 			console.log(jqXHR);
@@ -276,8 +322,6 @@ function displayInfo(result) {
 	//exchange
 
 	var base = result.data.restCountries.currencies['0']['code'];
-
-	console.log(base);
 
 	$('#baseCurrency').html(base);
 	$('#txtExchange').empty();
