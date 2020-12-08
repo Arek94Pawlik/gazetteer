@@ -9,8 +9,9 @@
     <link rel="icon" href="libs/images/favicon.ico" />
     <link rel="stylesheet" type="text/css" href="libs/css/preloader.css" />
     <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css2?family=Indie+Flower&family=Texturina:ital,wght@1,600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital@0;1&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="libs/leaflet/leaflet.css" />
+    <link rel="stylesheet" href="libs\leaflet\extraMarkers\Leaflet.ExtraMarkers\dist\css\leaflet.extra-markers.min.css" />
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="libs/css/trialPage4.css" />
 
@@ -91,12 +92,50 @@
                     </div>
                     <br />
                     <div id="info-container">
-                        <p>Capital: <span id="capital"></span></p>
-                        <p>Dialing Code: <span id="dialing-code"></span></p>
-                        <p>Population: <span id="population"></span></p>
-                        <p>Currencies: <span id="currencies"></span></p>
-                        <p>Region: <span id="region"></span></p>
-                        <p>Subregion: <span id="subregion"></span></p>
+                        <table>
+                            <tr>
+                                <td align="right">
+                                    Capital:
+                                </td>
+                                <td class="temp" id="capital">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="right">
+                                    Dialing Code:
+                                </td>
+                                <td class="temp" id="dialing-code">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="right">
+                                    Population:
+                                </td>
+                                <td class="temp" id="population">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="right">
+                                    Currencies:
+                                </td>
+                                <td class="temp" id="currencies">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="right">
+                                    Region:
+                                </td>
+                                <td class="temp" id="region">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="right">
+                                    Subregion:
+                                </td>
+                                <td class="temp" id="subregion">
+                                </td>
+                            </tr>
+                        </table>
                         <!--<p>Sovereignity: <span id="forwardOpenCageSovereign"></span></p>-->
                     </div>
                 </div>
@@ -245,6 +284,7 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <script src="libs/leaflet/leaflet.js"></script>
     <script src="libs\vendors\leaflet-providers.js"></script>
+    <script src="libs\leaflet\extraMarkers\Leaflet.ExtraMarkers\dist\js\leaflet.extra-markers.min.js"></script>
     <script type="application/javascript" src="libs/js/trialPage4.js"></script>
 
 </body>
