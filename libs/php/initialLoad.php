@@ -5,9 +5,13 @@
 	//ReverseOpenCage API call
 
 
-	$openCageAPIkey = '<<APIKEY>>';
+	$openCageAPIkey = <<APIkey>>;
 	
+	$lat = 51.5074;
+	$lng = 0.1278;
+
 	$urlOpenCage='https://api.opencagedata.com/geocode/v1/json?q=' . $_REQUEST{'LAT'} . '+' . $_REQUEST{'LNG'} . '&key=' . $openCageAPIkey;
+
 
 	$ch = curl_init();
 	curl_setopt($ch, CURLOPT_URL,$urlOpenCage);
@@ -20,13 +24,19 @@
 
 	$revOpenCage = json_decode($resultOpenCage,true);	
 	
-	$openCageIsoCode = $revOpenCage['results']['0']['components']['ISO_3166-1_alpha-3'];
-	$revOpenCageCity=$revOpenCage['results']['0']['components']['city'];
+	$openCageIsoCode2 = $revOpenCage['results']['0']['components']['ISO_3166-1_alpha-2'];
+	$openCageIsoCode3 = $revOpenCage['results']['0']['components']['ISO_3166-1_alpha-3'];
+	
+	if (isset($revOpenCage['results']['0']['components']['city'])) {
+		$revOpenCageCity=$revOpenCage['results']['0']['components']['city'];
+	} elseif (isset($revOpenCage['results']['0']['components']['town'])) {
+		$revOpenCageCity=$revOpenCage['results']['0']['components']['town'];
+	}
 
 
 	//REST Countries API call
 
-	$urlRestCountries = 'https://restcountries.eu/rest/v2/alpha/'.$openCageIsoCode;
+	$urlRestCountries = 'https://restcountries.eu/rest/v2/alpha/'.$openCageIsoCode3;
 
 
 	$rc = curl_init();
@@ -42,7 +52,7 @@
 
 	//weather API call
 
-	$weatherAPIkey ='<<APIKEY>>';
+	$weatherAPIkey =<<APIkey>>;
 	
 	$urlWeather='api.openweathermap.org/data/2.5/weather?q=' . $revOpenCageCity . '&appid='.$weatherAPIkey;
 	
@@ -59,7 +69,7 @@
 	
 	//exchange API call
 
-	$exchangeAPIkey='<<APIKEY>>';
+	$exchangeAPIkey=<<APIkey>>;
 
 	$urlExchange='https://openexchangerates.org/api/latest.json?app_id='.$exchangeAPIkey;
 
@@ -73,6 +83,70 @@
 	curl_close($ex);
 
 	$exchangeData = json_decode($resultEX,true);
+
+	//news API call
+	
+	$apiKeyNews=<<APIkey>>;
+	
+	$urlNews='https://newsapi.org/v2/top-headlines?country='.$openCageIsoCode2.'&apiKey='.$apiKeyNews;
+
+	$nw = curl_init();
+	curl_setopt($nw, CURLOPT_SSL_VERIFYPEER, false);
+	curl_setopt($nw, CURLOPT_RETURNTRANSFER, true);
+	curl_setopt($nw, CURLOPT_URL,$urlNews);
+
+	$resultNews=curl_exec($nw);
+
+	curl_close($nw);
+
+	$newsData = json_decode($resultNews,true);
+	
+	//geoPlaces API call
+
+	$geoNamesUsername=<<APIkey>>;
+
+	$geoCountry = $openCageIsoCode2;
+	
+	$urlGeoBounds = 'http://api.geonames.org/countryInfoJSON?country='.$geoCountry.'&username='.$geoNamesUsername;
+
+	$gc = curl_init();
+	curl_setopt($gc, CURLOPT_SSL_VERIFYPEER, false);
+	curl_setopt($gc, CURLOPT_RETURNTRANSFER, true);
+	curl_setopt($gc, CURLOPT_URL,$urlGeoBounds);
+
+	$resultGeoCities=curl_exec($gc);
+
+	curl_close($gc);
+
+	$geoCitiesData = json_decode($resultGeoCities,true);
+
+	$geoBoundSouth = $geoCitiesData['geonames'][0]['south'];
+	$geoBoundNorth = $geoCitiesData['geonames'][0]['north'];
+	$geoBoundEast = $geoCitiesData['geonames'][0]['east'];
+	$geoBoundWest = $geoCitiesData['geonames'][0]['west'];
+
+	
+	$urlGeoPlaces='http://api.geonames.org/citiesJSON?maxRows=100&north='.$geoBoundNorth.'&south='.$geoBoundSouth.'&east='.$geoBoundEast.'&west='.$geoBoundWest.'&lang=en&username='.$geoNamesUsername;
+
+	$gp = curl_init();
+	curl_setopt($gp, CURLOPT_SSL_VERIFYPEER, false);
+	curl_setopt($gp, CURLOPT_RETURNTRANSFER, true);
+	curl_setopt($gp, CURLOPT_URL,$urlGeoPlaces);
+
+	$resultGeoPlaces=curl_exec($gp);
+
+	curl_close($gp);
+
+	$geoPlaces = json_decode($resultGeoPlaces,true);	
+
+	
+	$geoPlacesData = array();
+
+	if ($geoPlaces['geonames']) {
+		array_push($geoPlacesData, $geoPlaces);
+	} else {
+		array_push($geoPlacesData, );
+	}
 	
 
 	//Borders
@@ -81,7 +155,7 @@
 
 	$borders = json_decode($bordersGeo,true);
 
-	$iso =$openCageIsoCode;
+	$iso =$openCageIsoCode3;
 
 	$GeoBorders = array();
 
@@ -102,9 +176,9 @@
 	$output['data']['weatherData'] = $weatherData;
 	$output['data']['exchange'] = $exchangeData;
 	$output['data']['GeoBordersData'] = $GeoBorders;
+	$output['data']['News'] = $newsData;
+	$output['data']['geoPlaces'] = $geoPlaces;
 	
-
-
 	header('Content-Type: application/json; charset=UTF-8');
 
 	echo json_encode($output); 
