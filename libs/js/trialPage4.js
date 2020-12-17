@@ -3,6 +3,7 @@
 
 $('window').ready(function () {
 
+	console.log("countries1");
 
 	$.ajax({
 		url: "libs/php/initBorders.php",
@@ -13,7 +14,15 @@ $('window').ready(function () {
 		},
 		success: function (result) {
 
-			$('#countries').html(result['data']);
+			console.log("countries2");
+			
+			let options = '';
+			
+			$.each(result.data.countries, function (index, country) {
+				options += '<option value="' + country[1] + '">' + country[0] + '</option>'
+			});
+			
+			$('#countries').html(options);
 		},
 		error: function (jqXHR, textStatus, errorThrown) {
 			console.log("countriesError");
@@ -30,43 +39,27 @@ $('window').ready(function () {
 
 var londonLatitude = 51.5074;
 var londonLongitude = 0.1278;
-var latValue = document.getElementById("latitude");
-var lngValue = document.getElementById("longitude");
-var latDesc = document.getElementById("latDescription");
-var lngDesc = document.getElementById("lngDescription");
 
 //location generator
 
 $('window').ready(function getLocation() {
 	if (navigator.geolocation) {
-		console.log("nav1");
 		navigator.geolocation.getCurrentPosition(definePosition, showError);
 	} else {
-		console.log("nav2");
 		console.log("Geolocation is not supported by this browser.")
 		showPosition(londonLatitude, londonLongitude);
 	}
 });
 
 function definePosition(position) {
-	console.log("define1");
-	console.log(position);
 	latitude = position.coords.latitude;
-	console.log(latitude);
 	longitude = position.coords.longitude;
-	console.log(longitude);
 	showPosition(latitude, longitude);
 }
 
 //Geolocation position display
 
 function showPosition(lat, lng) {
-	latDesc.innerHTML = "Latitude: ";
-	latValue.innerHTML = lat;
-	lngDesc.innerHTML = "<br>Longitude: ";
-	lngValue.innerHTML = lng;
-	console.log(lat);
-	console.log(lng);
 	initialDisplay(lat, lng)
 }
 
@@ -101,18 +94,18 @@ var marker = null;
 var theCountry = null;
 var bounds = null;
 
+
 //position map and marker
 
 function mapPosition(lat, lng, city) {
 
-	var extraMarker = L.ExtraMarkers.icon({
-		shape: 'star',
-		markerColor: 'violet',
-	});
-
-
 	map.addLayer(osmLayer);
 	map.setView(new L.LatLng(lat, lng), 4);
+
+	var extraMarker = L.ExtraMarkers.icon({
+		shape: 'circle',
+		markerColor: 'cyan',
+	});
 
 	if (marker != null) {
 		map.removeLayer(marker);
@@ -120,6 +113,54 @@ function mapPosition(lat, lng, city) {
 
 	marker = L.marker([lat, lng], { icon: extraMarker }).addTo(map);
 	marker.bindPopup("Welcome to " + city + "!").openPopup();
+}
+
+function addCities(cities, iso) {
+	console.log(cities);
+	console.log(iso);
+
+	var foreignCityMarker = L.ExtraMarkers.icon({
+		shape: 'star',
+		markerColor: 'blue',
+	});
+
+	var largerCityMarker = L.ExtraMarkers.icon({
+		shape: 'penta',
+		markerColor: 'red',
+	});
+
+	var largeCityMarker = L.ExtraMarkers.icon({
+		shape: 'penta',
+		markerColor: 'orange',
+	});
+
+	var smallCityMarker = L.ExtraMarkers.icon({
+		shape: 'penta',
+		markerColor: 'yellow',
+	});
+
+	if (cityMarkers) {
+		map.removeLayer(cityMarkers);
+	};
+	
+	var cityMarkers = new L.layerGroup();
+
+	cities.forEach(function (city) {
+		//console.log(city);
+		
+		if (city.fcode != 'PPLC' && city.countrycode == iso && city.population >= 500000) {
+			marker = new L.marker([city.lat, city.lng], { icon: largerCityMarker }).bindPopup("Welcome to " + city.name + "!<br> Population:" + city.population).addTo(cityMarkers);
+		} else if (city.fcode != 'PPLC' && city.countrycode == iso && city.population < 500000 && city.population >= 200000) {
+			marker = new L.marker([city.lat, city.lng], { icon: largeCityMarker }).bindPopup("Welcome to " + city.name + "!<br> Population:" + city.population).addTo(cityMarkers);
+		} else if (city.fcode != 'PPLC' && city.countrycode == iso && city.population < 200000) {
+			marker = new L.marker([city.lat, city.lng], { icon: smallCityMarker }).bindPopup("Welcome to " + city.name + "!<br> Population:" + city.population).addTo(cityMarkers);
+		} else if (city.countrycode != iso) {
+			marker = new L.marker([city.lat, city.lng], { icon: foreignCityMarker }).bindPopup("Welcome to " + city.name + "!<br> Population:" + city.population).addTo(cityMarkers);
+		};
+	})
+	 
+	cityMarkers.addTo(map);
+
 }
 
 //add borders and fit bounds
@@ -200,6 +241,9 @@ function newCountrySelection(event) {
 
 function initialDisplay(lat, lng) {
 
+	console.log("initail1");
+	console.log(lat);
+	console.log(lng);
 
 	$.ajax({
 		url: "libs/php/initialLoad.php",
@@ -211,14 +255,24 @@ function initialDisplay(lat, lng) {
 		},
 		success: function (result) {
 
+			console.log("initail2");
+
 			if (result) {
 
+				console.log(result);
 				displayInfo(result);
 
             }
 
+			let currentCity = null;
+
 			let currentSelector = result.data.restCountries.alpha3Code;
-			let currentCity = result.data.revOpenCage[0].components.city;
+			if (result.data.revOpenCage[0].components.city) {
+				currentCity = result.data.revOpenCage[0].components.city;
+			} else if (result.data.revOpenCage[0].components.town) {
+				currentCity = result.data.revOpenCage[0].components.town;
+            }
+			
 
 			let region = result.data.restCountries.region;
 
@@ -239,6 +293,8 @@ function initialDisplay(lat, lng) {
 
 function selectDisplay(isoCode) {
 
+	console.log("select1");
+
 	$.ajax({
 		url: "libs/php/selectLoad.php",
 		type: 'POST',
@@ -248,15 +304,13 @@ function selectDisplay(isoCode) {
 		},
 		success: function (result) {
 
+			console.log("select1");
+
 			if (result) {
 
 				displayInfo(result);
 				let latlng = result.data.ForwardOpenCage.results[0].geometry;
 				let city = result.data.restCountries.capital;
-				console.log(latlng);
-				console.log(latlng['lat']);
-				console.log(latlng['lng']);
-				console.log(city);
 				mapPosition(latlng['lat'], latlng['lng'], city);
 				let region = result.data.restCountries.region;
 				borderBounds(result.data.GeoBordersData, region);
@@ -278,7 +332,8 @@ function selectDisplay(isoCode) {
 
 function displayInfo(result) {
 
-	console.log("displayInfo1");
+
+	console.log("display1");
 	console.log(result);
 
 	//country info
@@ -335,6 +390,56 @@ function displayInfo(result) {
 		let rate = value / result.data.exchange.rates[base];
 		return rate.toFixed(5);
 	}
+
+	//news
+
+	if (result.data.News.articles.length != 0) {
+		$('#newsCountry').html(result.data.restCountries.nativeName);
+		$('#newsNavButton').prop('disabled', false);
+		$('#newsNavButton').removeClass('nav-link-disabled');
+		$('#newsNavButton').removeAttr('data-toggle').removeAttr('data-placement').removeAttr('data-original-title');
+		$('#newsNavButton').attr('data-toggle', 'modal');
+		let carouselIndicators = '';
+		let newsArticles = '';
+		let counter = 0;
+		result.data.News.articles.forEach(function (article) {
+			if (counter == 0) {
+				let articleTitle = article.title;
+				let articleUrl = article.url;
+				let articleUrlToImage = (article.urlToImage != null) ? article.urlToImage : "../images/noimage.png";
+				newsArticles += '<div class="carousel-item active"><div class="card"><div class="card-header">' + articleTitle + '</div><div class="card-body"><a href="' + articleUrl + '" target="_blank"><img src="' + articleUrlToImage + '" /></a></div><div class="card-footer">' + article.description + '</div></div></div>';
+				carouselIndicators += '<li data-target="#newsCarousel" data-slide-to="'+counter+'" class="active"></li>';
+				counter += 1;
+			} else {
+				newsArticles += '<div class="carousel-item"><div class="card"><div class="card-header">' + article.title + '</div><div class="card-body"><a href="' + article.url + '" target="_blank"><img src="' + article.urlToImage + '" alt="'+article.title+'" /></a></div><div class="card-footer">' + article.description + '</div></div></div>';
+				carouselIndicators += '<li data-target="#newsCarousel" data-slide-to="'+counter+'"></li>';
+				counter += 1;
+            }
+		});
+		$('#newsCarouselIndicators').html(carouselIndicators)
+		$('#newsCarouselInner').html(newsArticles);
+	} else {
+		$('#newsNavButton').prop('disabled', true);
+		$('#newsNavButton').addClass('nav-link-disabled');
+		$('#newsNavButton').removeAttr('data-toggle');
+		$('#newsNavButton').attr('data-toggle', 'tooltip').attr('data-original-title', 'No news for chosen country');
+		$('#newsNavButton').hover(function () {
+			$('[data-toggle="tooltip"]').tooltip();
+		});
+    }
+
+
+	//places
+
+	var iso2 = result.data.restCountries.alpha2Code;
+	var geoCities = result.data.geoPlaces;
+
+	if (result.data.geoPlaces.geonames) {
+		console.log(geoCities);
+		addCities(geoCities.geonames, iso2);
+	};
+	
+
 }
 
 function k2c(kelvin) {
