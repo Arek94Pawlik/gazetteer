@@ -6,9 +6,6 @@
 
 
 	$openCageAPIkey = <<APIkey>>;
-	
-	$lat = 51.5074;
-	$lng = 0.1278;
 
 	$urlOpenCage='https://api.opencagedata.com/geocode/v1/json?q=' . $_REQUEST{'LAT'} . '+' . $_REQUEST{'LNG'} . '&key=' . $openCageAPIkey;
 
