@@ -10,18 +10,18 @@ $('window').ready(function () {
 		type: 'POST',
 		dataType: 'json',
 		data: {
-			
+
 		},
 		success: function (result) {
 
 			console.log("countries2");
-			
+
 			let options = '';
-			
+
 			$.each(result.data.countries, function (index, country) {
 				options += '<option value="' + country[1] + '">' + country[0] + '</option>'
 			});
-			
+
 			$('#countries').html(options);
 		},
 		error: function (jqXHR, textStatus, errorThrown) {
@@ -34,6 +34,8 @@ $('window').ready(function () {
 
 
 });
+
+//spinner
 
 //initial global variables
 
@@ -84,16 +86,77 @@ function showError(error) {
 //MAP
 
 $('#mapid').html("<div id='map' style='width: 100%; height: 100%;'></div>");
-var exampleCountry = 'United Kingdom';
 var osmUrl = 'https://stamen-tiles-{s}.a.ssl.fastly.net/terrain/{z}/{x}/{y}{r}.png',
 	osmAttribution = 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> & mdash; Map data & copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
 osmLayer = new L.TileLayer(osmUrl, { maxZoom: 18, attribution: osmAttribution });
 
 var map = new L.Map('map');
-var marker = null; 
+var marker = null;
 var theCountry = null;
 var bounds = null;
 
+var easyInfo = L.easyButton(
+	'fa-info', function (btn, map) {
+		$('#myModalInfo').modal('show');
+	}).addTo(map);
+var easyWeather = L.easyButton(
+	'fa-bolt', function (btn, map) {
+		$('#myModalWeather').modal('show');
+	}).addTo(map);
+var easyExchange = L.easyButton(
+	'fa-gbp', function (btn, map) {
+		$('#myModalEX').modal('show');
+	}).addTo(map);
+var easyNews = L.easyButton(
+	'fas fa-address-card', function (btn, map) {
+		$('#myModalNews').modal('show');
+	}).addTo(map);
+
+
+L.Map.include({
+
+	'clear': function () {
+
+	this.eachLayer(function (layer) {
+
+			if (layer.options.pane === "tooltipPane") {
+
+				layer.removeFrom(map);
+
+			}
+
+			if (layer instanceof L.Marker) {
+
+				this.removeLayer(layer);
+
+			}
+
+			if (layer instanceof L.Circle) {
+
+				this.removeLayer(layer);
+
+			}
+
+			if (layer instanceof L.Polygon) {
+
+				this.removeLayer(layer);
+
+			}
+
+			if (layer instanceof L.Polyline) {
+
+				this.removeLayer(layer);
+
+			}
+
+			if (layer instanceof L.CircleMarker) {
+
+				this.removeLayer(layer);
+
+			}
+		}, this)
+	}
+});
 
 //position map and marker
 
@@ -116,8 +179,33 @@ function mapPosition(lat, lng, city) {
 }
 
 function addCities(cities, iso) {
-	console.log(cities);
-	console.log(iso);
+
+	map.clear();
+	if (overlayMaps != null) {
+		map.removeControl(overlayMaps);
+    }
+	
+
+	let largerCities = new L.featureGroup()
+		.addTo(map);
+
+	let largeCities = new L.featureGroup()
+		.addTo(map);
+
+	let smallCities = new L.featureGroup()
+		.addTo(map);
+
+	let foreignCities = new L.featureGroup()
+		.addTo(map);
+
+	var overlayMaps = {
+		"Large cities" : largerCities,
+		"Medium cities" : largeCities,
+		"Small cities" : smallCities,
+		"Nearby foreign cities": foreignCities
+	};
+
+	L.control.layers(null, overlayMaps).addTo(map);
 
 	var foreignCityMarker = L.ExtraMarkers.icon({
 		shape: 'star',
@@ -139,28 +227,19 @@ function addCities(cities, iso) {
 		markerColor: 'yellow',
 	});
 
-	if (cityMarkers) {
-		map.removeLayer(cityMarkers);
-	};
-	
-	var cityMarkers = new L.layerGroup();
 
 	cities.forEach(function (city) {
-		//console.log(city);
-		
+
 		if (city.fcode != 'PPLC' && city.countrycode == iso && city.population >= 500000) {
-			marker = new L.marker([city.lat, city.lng], { icon: largerCityMarker }).bindPopup("Welcome to " + city.name + "!<br> Population:" + city.population).addTo(cityMarkers);
+			marker = new L.marker([city.lat, city.lng], { icon: largerCityMarker }).bindPopup("Welcome to " + city.name + "!<br> Population:" + city.population).addTo(largerCities);
 		} else if (city.fcode != 'PPLC' && city.countrycode == iso && city.population < 500000 && city.population >= 200000) {
-			marker = new L.marker([city.lat, city.lng], { icon: largeCityMarker }).bindPopup("Welcome to " + city.name + "!<br> Population:" + city.population).addTo(cityMarkers);
+			marker = new L.marker([city.lat, city.lng], { icon: largeCityMarker }).bindPopup("Welcome to " + city.name + "!<br> Population:" + city.population).addTo(largeCities);
 		} else if (city.fcode != 'PPLC' && city.countrycode == iso && city.population < 200000) {
-			marker = new L.marker([city.lat, city.lng], { icon: smallCityMarker }).bindPopup("Welcome to " + city.name + "!<br> Population:" + city.population).addTo(cityMarkers);
+			marker = new L.marker([city.lat, city.lng], { icon: smallCityMarker }).bindPopup("Welcome to " + city.name + "!<br> Population:" + city.population).addTo(smallCities);
 		} else if (city.countrycode != iso) {
-			marker = new L.marker([city.lat, city.lng], { icon: foreignCityMarker }).bindPopup("Welcome to " + city.name + "!<br> Population:" + city.population).addTo(cityMarkers);
+			marker = new L.marker([city.lat, city.lng], { icon: foreignCityMarker }).bindPopup("Welcome to " + city.name + "!<br> Population:" + city.population).addTo(foreignCities);
 		};
 	})
-	 
-	cityMarkers.addTo(map);
-
 }
 
 //add borders and fit bounds
@@ -185,7 +264,7 @@ function borderBounds(object, region) {
 			break;
 		case "Asia":
 			boundsStyle = {
-				fillColor: "#f7fa52", 
+				fillColor: "#f7fa52",
 				color: "#f8fc00",
 				weight: 3,
 				opacity: 1,
@@ -219,7 +298,7 @@ function borderBounds(object, region) {
 				fillOpacity: 0.6
 			};
 			break;
-    }
+	}
 
 	theCountry = L.geoJson(object, boundsStyle).addTo(map);
 
@@ -262,7 +341,7 @@ function initialDisplay(lat, lng) {
 				console.log(result);
 				displayInfo(result);
 
-            }
+			}
 
 			let currentCity = null;
 
@@ -271,13 +350,13 @@ function initialDisplay(lat, lng) {
 				currentCity = result.data.revOpenCage[0].components.city;
 			} else if (result.data.revOpenCage[0].components.town) {
 				currentCity = result.data.revOpenCage[0].components.town;
-            }
-			
+			}
+
 
 			let region = result.data.restCountries.region;
 
 			$('#countries option[value=' + currentSelector + ']').attr('selected', 'selected');
-			
+
 			mapPosition(lat, lng, currentCity);
 			borderBounds(result.data.GeoBordersData, region);
 		},
@@ -377,12 +456,25 @@ function displayInfo(result) {
 	//exchange
 
 	var base = result.data.restCountries.currencies['0']['code'];
-
-	$('#baseCurrency').html(base);
+	var curName = result.data.restCountries.currencies['0']['name'];
+	var curSign = result.data.restCountries.currencies['0']['symbol'];
+	$('#baseCurrencyName').html(curName);
+	$('#baseCurrencySign').html(curSign);
 	$('#txtExchange').empty();
 	$.each(result.data.exchange['rates'], function (key, value) {
-
-		$('#txtExchange').append("<tr><td align='right'>" + key + ": </td><td align='right'>" + usd2gbp(value) + "</td></tr>")
+		let currencyName = '';
+		let currencySymbol = '';
+		$.each(result.data.currencies, function (index, item) {
+			if (key == item.cc) {
+				currencyName = item.name;
+				currencySymbol = item.symbol;
+			}
+		});
+		$.each(result.data.currencies, function (index, item) {
+			if (key == item.cc) {
+				$('#txtExchange').append("<tr><td>" + currencyName + " (" + key + ")</td><td>" + usd2gbp(value) + " (" + currencySymbol + ")</td>");
+			}
+		});
 	});
 
 
@@ -399,25 +491,14 @@ function displayInfo(result) {
 		$('#newsNavButton').removeClass('nav-link-disabled');
 		$('#newsNavButton').removeAttr('data-toggle').removeAttr('data-placement').removeAttr('data-original-title');
 		$('#newsNavButton').attr('data-toggle', 'modal');
-		let carouselIndicators = '';
 		let newsArticles = '';
-		let counter = 0;
 		result.data.News.articles.forEach(function (article) {
-			if (counter == 0) {
-				let articleTitle = article.title;
-				let articleUrl = article.url;
-				let articleUrlToImage = (article.urlToImage != null) ? article.urlToImage : "../images/noimage.png";
-				newsArticles += '<div class="carousel-item active"><div class="card"><div class="card-header">' + articleTitle + '</div><div class="card-body"><a href="' + articleUrl + '" target="_blank"><img src="' + articleUrlToImage + '" /></a></div><div class="card-footer">' + article.description + '</div></div></div>';
-				carouselIndicators += '<li data-target="#newsCarousel" data-slide-to="'+counter+'" class="active"></li>';
-				counter += 1;
-			} else {
-				newsArticles += '<div class="carousel-item"><div class="card"><div class="card-header">' + article.title + '</div><div class="card-body"><a href="' + article.url + '" target="_blank"><img src="' + article.urlToImage + '" alt="'+article.title+'" /></a></div><div class="card-footer">' + article.description + '</div></div></div>';
-				carouselIndicators += '<li data-target="#newsCarousel" data-slide-to="'+counter+'"></li>';
-				counter += 1;
-            }
+			let articleTitle = article.title;
+			let articleUrl = article.url;
+			let articleUrlToImage = (article.urlToImage != null) ? article.urlToImage : "../images/noimage.png";
+			newsArticles += '<tr><td><a class="newsImage" href="' + articleUrl + '" target="_blank"><img src="' + articleUrlToImage + '" /></a></td><td colspan="2"><a href"' + articleUrl + '" target="_blank">' + articleTitle + '</a></td></tr>';
 		});
-		$('#newsCarouselIndicators').html(carouselIndicators)
-		$('#newsCarouselInner').html(newsArticles);
+		$('#newsList').html(newsArticles);
 	} else {
 		$('#newsNavButton').prop('disabled', true);
 		$('#newsNavButton').addClass('nav-link-disabled');
@@ -426,7 +507,7 @@ function displayInfo(result) {
 		$('#newsNavButton').hover(function () {
 			$('[data-toggle="tooltip"]').tooltip();
 		});
-    }
+	}
 
 
 	//places
@@ -434,11 +515,12 @@ function displayInfo(result) {
 	var iso2 = result.data.restCountries.alpha2Code;
 	var geoCities = result.data.geoPlaces;
 
+
 	if (result.data.geoPlaces.geonames) {
 		console.log(geoCities);
 		addCities(geoCities.geonames, iso2);
 	};
-	
+
 
 }
 
