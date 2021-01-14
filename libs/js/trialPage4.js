@@ -62,7 +62,9 @@ function definePosition(position) {
 //Geolocation position display
 
 function showPosition(lat, lng) {
-	initialDisplay(lat, lng)
+
+	initialDisplay(lat, lng);
+
 }
 
 function showError(error) {
@@ -117,7 +119,7 @@ L.Map.include({
 
 	'clear': function () {
 
-	this.eachLayer(function (layer) {
+		this.eachLayer(function (layer) {
 
 			if (layer.options.pane === "tooltipPane") {
 
@@ -158,6 +160,7 @@ L.Map.include({
 	}
 });
 
+
 //position map and marker
 
 function mapPosition(lat, lng, city) {
@@ -175,16 +178,14 @@ function mapPosition(lat, lng, city) {
 	};
 
 	marker = L.marker([lat, lng], { icon: extraMarker }).addTo(map);
-	marker.bindPopup("Welcome to " + city + "!").openPopup();
+	marker.bindPopup("Welcome to " + city + "!<br>Click <strong>here</strong> for pictures").openPopup();
 }
 
 function addCities(cities, iso) {
 
 	map.clear();
-	if (overlayMaps != null) {
-		map.removeControl(overlayMaps);
-    }
-	
+
+	let clusters = new L.MarkerClusterGroup().addTo(map);
 
 	let largerCities = new L.featureGroup()
 		.addTo(map);
@@ -198,14 +199,20 @@ function addCities(cities, iso) {
 	let foreignCities = new L.featureGroup()
 		.addTo(map);
 
+
 	var overlayMaps = {
-		"Large cities" : largerCities,
-		"Medium cities" : largeCities,
-		"Small cities" : smallCities,
+		"Large cities": largerCities,
+		"Medium cities": largeCities,
+		"Small cities": smallCities,
 		"Nearby foreign cities": foreignCities
 	};
 
-	L.control.layers(null, overlayMaps).addTo(map);
+
+	//if (layerscontrol) {
+	//	layerscontrol.remove();
+	//} 
+
+	let layerscontrol = new L.control.layers(null, overlayMaps).addTo(map);
 
 	var foreignCityMarker = L.ExtraMarkers.icon({
 		shape: 'star',
@@ -231,16 +238,55 @@ function addCities(cities, iso) {
 	cities.forEach(function (city) {
 
 		if (city.fcode != 'PPLC' && city.countrycode == iso && city.population >= 500000) {
-			marker = new L.marker([city.lat, city.lng], { icon: largerCityMarker }).bindPopup("Welcome to " + city.name + "!<br> Population:" + city.population).addTo(largerCities);
+			marker = new L.marker([city.lat, city.lng], { icon: largerCityMarker }).bindPopup("Welcome to " + city.name + "<br> Population:" + city.population + "<br>Click <strong>here</strong> for pictures").addTo(largerCities);
 		} else if (city.fcode != 'PPLC' && city.countrycode == iso && city.population < 500000 && city.population >= 200000) {
-			marker = new L.marker([city.lat, city.lng], { icon: largeCityMarker }).bindPopup("Welcome to " + city.name + "!<br> Population:" + city.population).addTo(largeCities);
+			marker = new L.marker([city.lat, city.lng], { icon: largeCityMarker }).bindPopup("Welcome to " + city.name + "<br> Population:" + city.population + "<br>Click <strong>here</strong> for pictures").addTo(largeCities);
 		} else if (city.fcode != 'PPLC' && city.countrycode == iso && city.population < 200000) {
-			marker = new L.marker([city.lat, city.lng], { icon: smallCityMarker }).bindPopup("Welcome to " + city.name + "!<br> Population:" + city.population).addTo(smallCities);
+			marker = new L.marker([city.lat, city.lng], { icon: smallCityMarker }).bindPopup("Welcome to " + city.name + "<br> Population:" + city.population + "<br>Click <strong>here</strong> for pictures").addTo(smallCities);
 		} else if (city.countrycode != iso) {
-			marker = new L.marker([city.lat, city.lng], { icon: foreignCityMarker }).bindPopup("Welcome to " + city.name + "!<br> Population:" + city.population).addTo(foreignCities);
+			marker = new L.marker([city.lat, city.lng], { icon: foreignCityMarker }).bindPopup("Welcome to " + city.name + "<br> Population:" + city.population + "<br>Click <strong>here</strong> for pictures").addTo(foreignCities);
 		};
+
 	})
+
+	clusters.addLayer(marker);
+
 }
+
+$('#pixacity').click(function () {
+	var value = $('#pixacity').val
+	console.log(value);
+
+	//$.ajax({
+	//	url: "libs/php/pixabay.php",
+	//	type: 'POST',
+	//	dataType: 'json',
+	//	data: {
+	//		CITY: city,
+	//	},
+	//	success: function (result) {
+
+	//		console.log(result);
+	//		//var images = '';
+	//		//$.each(result.data.hits, function (index, item) {
+	//		//	images += "<img src='" + item.previewURL + "'><br />";
+	//		//})
+
+	//		//console.log(images);
+
+	//		//$('#images').html(images);
+
+
+	//	},
+	//	error: function (jqXHR, textStatus, errorThrown) {
+
+	//		console.log(jqXHR);
+	//		console.log(textStatus);
+	//		console.log(errorThrown);
+	//	}
+	//});
+
+});
 
 //add borders and fit bounds
 
@@ -320,10 +366,6 @@ function newCountrySelection(event) {
 
 function initialDisplay(lat, lng) {
 
-	console.log("initail1");
-	console.log(lat);
-	console.log(lng);
-
 	$.ajax({
 		url: "libs/php/initialLoad.php",
 		type: 'POST',
@@ -333,8 +375,6 @@ function initialDisplay(lat, lng) {
 			LNG: lng
 		},
 		success: function (result) {
-
-			console.log("initail2");
 
 			if (result) {
 
@@ -371,8 +411,6 @@ function initialDisplay(lat, lng) {
 };
 
 function selectDisplay(isoCode) {
-
-	console.log("select1");
 
 	$.ajax({
 		url: "libs/php/selectLoad.php",
@@ -411,8 +449,6 @@ function selectDisplay(isoCode) {
 
 function displayInfo(result) {
 
-
-	console.log("display1");
 	console.log(result);
 
 	//country info
@@ -517,10 +553,25 @@ function displayInfo(result) {
 
 
 	if (result.data.geoPlaces.geonames) {
-		console.log(geoCities);
 		addCities(geoCities.geonames, iso2);
 	};
 
+	 //covid
+
+	var iso3 = result.data.restCountries.alpha3Code;
+	var covidCountry = result.data.restCountries.name;
+
+	$.each(result.data.covid.features, function (index, item) {
+		if (item.attributes.ISO3 == iso3) {
+			$('#covidCountry').html(covidCountry);
+			$('#covidActive').html(item.attributes.Active);
+			$('#covidDeaths').html(item.attributes.Deaths);
+			$('#covidConfirmed').html(item.attributes.Confirmed);
+			$('#covidRecovered').html(item.attributes.Recovered);
+        }
+	})
+
+	$('#covid').html()
 
 }
 
