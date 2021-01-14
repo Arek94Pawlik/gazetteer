@@ -10,7 +10,7 @@ html, body {
 
 .mapContainer {
     position: absolute;
-    top: 165.6px;
+    top: 86px;
     right: 0;
     bottom: 0;
     left: 0;
@@ -27,50 +27,58 @@ html, body {
     max-width: 20px;
 }
 
+#banner {
+    display: block;
+}
+
 .jumbotron {
     margin-bottom: 0px;
     padding: 0px;
-    background: linear-gradient(to bottom, #5bc0de, #4ed986, #28a745);
+    background-color: #28a745;
 }
 
-.navbar-toggler .navbar-toggler-icon {
-    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgb(69,39,19)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 8h24M4 16h24M4 24h24'/%3E%3C/svg%3E");
+#countries {
+    max-width: 150px;
 }
 
-.navbar-toggler.navbar-toggler {
-    border-color: #452713;
+#countriesDiv {
+    margin-right: 0;
+    padding: 15px 5px;
+    float: right;
 }
 
-.navbar-brand {
-    width: 128px;
+.navbar {
+    box-shadow: 0 1px #2a542c;
+    padding: 8px 0;
+    width: 100%;
 }
-
-.nav-link {
-    font-family: 'Indie Flower', cursive;
-    font-size: 1.5rem;
-    color: #452713;
-}
-
-    .nav-link:hover {
-        color: #2a542c;
-        font-weight: 600;
-    }
-
-
 
 .modal-header .close {
     font-size: 4rem;
     padding: 0 16px 0 16px;
 }
 
-.modal-content {
-    font-family: 'Indie Flower', cursive;
-    color: #452713;
-    background-image: linear-gradient(to bottom, #ffffff, #5bc0de, #4ed986, #28a745)
+.modal {
+    position: fixed;
+    height: 200vw;
+    top: 0px;
+    bottom: 0;
+    overflow: hidden;
+}
+
+.modal-header {
+    background-color: #c3e6cb;
+    font-family: 'Roboto', sans-serif;
 }
 
 .modal-body {
+    font-family: 'Roboto', sans-serif;
     font-size: 1.3rem;
+    background-color: #c3e6cb;
+}
+
+.modal-footer {
+    background-color: #c3e6cb;
 }
 
 .jumbo {
@@ -83,22 +91,29 @@ html, body {
     text-align: center;
 }
 
-#logoImg {
-    padding: 0;
-    height: 80%;
-    width: 100%;
-}
 
 .logoTitle {
-    padding-bottom: 30px;
+    padding: 15px 10px;
     vertical-align: bottom;
+    background: url('../images/forest-background.jpg');
+    -webkit-text-fill-color: transparent;
+    text-fill-color: transparent;
+    -webkit-background-clip: text;
+    background-clip: text;
     font-size: 2rem;
-    font-family: 'Texturina', serif;
-    color: #452713;
+    font-family: 'Roboto', sans-serif;
+    color: #f2fff7;
+    font-weight: 900;
+    -webkit-text-stroke-width: 0.01px;
+    -webkit-text-stroke-color: white;
 }
 
-#countries {
-    max-width: 200px;
+.logoSubTitle {
+    padding: 15px 25px;
+    vertical-align: bottom;
+    font-size: 1rem;
+    font-family: 'Roboto', sans-serif;
+    color: #f2fff7;
 }
 
 .rwd-line {
@@ -114,12 +129,37 @@ html, body {
     text-align: center;
 }
 
-    #weather-icon-container img {
-        border: 1px solid #b6ff00;
-        border-radius: 50%;
-        padding: 10px;
-        box-shadow: 10px -5px #b6ff00;
-    }
+#weather-icon-container img {
+    border: 1px solid #b6ff00;
+    border-radius: 50%;
+    padding: 10px;
+    box-shadow: 10px -5px #b6ff00;
+}
+
+.contentNews {
+    max-height: 70vh;
+    overflow-y: scroll;
+}
+
+.contentNews img {
+    max-width: 150px;
+    height: auto;
+}
+
+.newsImage {
+    max-width:33%;
+    height: auto;
+}
+
+#covidContent {
+    position: fixed;
+    bottom: 0;
+    z-index:9999;
+}
+
+#covidContent p {
+    display: inline;
+}
 
 @media screen and (min-width: 481px) {
     .rwd-line {
@@ -130,9 +170,58 @@ html, body {
 @media screen and (min-width: 768px) {
     .mapContainer {
         position: absolute;
-        top: 177px;
+        top: 85px;
         right: 0;
         bottom: 0;
         left: 0;
+    }
+    .modal {
+        position: fixed;
+        top: 0px;
+        bottom: 0;
+        overflow: hidden;
+    }
+    .navbar {
+        padding: 8px 16px;
+    }
+    .logoTitle {
+        padding: 15px 25px;
+    }
+    #countriesDiv {
+        padding: 15px;
+    }
+}
+
+@media (max-width: 768px) {
+    .navbar {
+        display: inline-block;
+        float: none;
+        vertical-align: top;
+    }
+
+}
+
+@media (min-width: 361px) {
+    #countries {
+        max-width: 200px;
+    }
+}
+@media (min-width: 768px) {
+    #countries {
+        max-width: 250px;
+    }
+}
+@media (max-width: 300px) {
+    .logoTitle {
+        padding: 15px 10px;
+        vertical-align: bottom;
+        font-size: 1.6rem;
+        font-family: 'Roboto', sans-serif;
+        color: #f2fff7;
+        font-weight: 700;
+    }
+    #countries {
+        max-width: 130px;
+        font-size: 1rem;
     }
 }
