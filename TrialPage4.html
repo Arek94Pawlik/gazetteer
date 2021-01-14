@@ -11,7 +11,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital@0;1&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="libs/leaflet/leaflet.css" />
-    <link rel="stylesheet" href="libs\leaflet\extraMarkers\Leaflet.ExtraMarkers\dist\css\leaflet.extra-markers.min.css" />
+    <link rel="stylesheet" href="libs/leaflet/extraMarkers/Leaflet.ExtraMarkers/dist/css/leaflet.extra-markers.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet-easybutton@2/src/easy-button.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="libs/css/trialPage4.css" />
 
@@ -20,61 +22,35 @@
 
     <!-- preloader -->
     <div id="preloader"></div>
-
+    <!-- spinner -->
+    <div id="spinner"></div>
     <!-- Banner -->
-    <div class="jumbotron" id="banner">
-        <a class="navbar-brand jumbo" href="https://www.apawlik.co.uk" target="_blank"><img id="logoImg" src="libs/images/logo.png" /></a>
-        <h3 class="jumbo logoTitle">Gazetteer</h3>
-    </div>
-
     <!-- Navigation -->
 
     <nav class="navbar navbar-expand-md navbar-success bg-success sticky-top">
 
-        <button class="navbar-toggler" data-toggle="collapse" data-target="#collapse_target">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <select class="browser-default custom-select" id="countries"></select>
-
-        <div class="collapse navbar-collapse" id="collapse_target">
-            <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link" href="#mapid" data-toggle="modal" data-target="#myModalInfo">Country info</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#weatherResults" data-toggle="modal" data-target="#myModalWeather">Weather</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#exchangeResults" data-toggle="modal" data-target="#myModalEX">Exchange</a>
-                </li>
-            </ul>
+        <div class="jumbotron jumbotron-success" id="banner">
+            <a href="https://trialpage.apawlik.co.uk"><h3 class="jumbo logoTitle">Gazetteer</h3></a>
+            <div id="countriesDiv">
+                <select class="browser-default custom-select" id="countries"></select>
+            </div>
         </div>
 
     </nav>
 
-    <!-- initial geolocation -->
-    <section class="container bgData">
-        <h2>Geolocation</h2>
-
-        <table>
-            <tr>
-                <td class="geoDescription" id="latDescription"></td>
-                <td class="geoDescription" id="latitude"></td>
-            </tr>
-            <tr>
-                <td class="geoDescription" id="lngDescription"></td>
-                <td class="geoDescription" id="longitude"></td>
-            </tr>
-        </table>
-
-    </section>
 
     <!-- Map -->
     <div class="mapContainer">
         <div id="mapid"></div>
     </div>
 
+    <div id="covidContent" class="container">
+        <div class="row">
+            <div class="alert alert-success alert-dismissible" role="alert">
+                <p>COVID-19 information for <span id="covidCountry"></span>&nbsp;&nbsp;:</p><marquee><p>Active cases: <span id="covidActive"></span></p>&nbsp;&nbsp;<p>Deaths: <span id="covidDeaths"></span></p>&nbsp;&nbsp;<p>Confirmed cases: <span id="covidConfirmed"></span></p>&nbsp;&nbsp;<p>Recovered: <span id="covidRecovered"></span></p></marquee>
+            </div>
+        </div>
+    </div>
 
     <!--Country Info Modal-->
     <div id="myModalInfo" class="modal fade" role="dialog">
@@ -83,7 +59,7 @@
             <!-- Modal content-->
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">Country information for <span id="countryInfoTitle"></span></h4>
+                    <h4 class="modal-title">Country information</h4>
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
                 <div class="modal-body">
@@ -92,49 +68,33 @@
                     </div>
                     <br />
                     <div id="info-container">
-                        <table>
-                            <tr>
-                                <td align="right">
-                                    Capital:
-                                </td>
-                                <td class="temp" id="capital">
-                                </td>
-                            </tr>
-                            <tr>
-                                <td align="right">
-                                    Dialing Code:
-                                </td>
-                                <td class="temp" id="dialing-code">
-                                </td>
-                            </tr>
-                            <tr>
-                                <td align="right">
-                                    Population:
-                                </td>
-                                <td class="temp" id="population">
-                                </td>
-                            </tr>
-                            <tr>
-                                <td align="right">
-                                    Currencies:
-                                </td>
-                                <td class="temp" id="currencies">
-                                </td>
-                            </tr>
-                            <tr>
-                                <td align="right">
-                                    Region:
-                                </td>
-                                <td class="temp" id="region">
-                                </td>
-                            </tr>
-                            <tr>
-                                <td align="right">
-                                    Subregion:
-                                </td>
-                                <td class="temp" id="subregion">
-                                </td>
-                            </tr>
+                        <table class="table table-sm">
+                            <tbody>
+                                <tr>
+                                    <th scope="row">Capital:</th>
+                                    <td class="temp" id="capital"></td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Dialing Code:</th>
+                                    <td class="temp" id="dialing-code"></td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Population:</th>
+                                    <td class="temp" id="population"></td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Currencies:</th>
+                                    <td class="temp" id="currencies"></td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Region:</th>
+                                    <td class="temp" id="region"></td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Subregion:</th>
+                                    <td class="temp" id="subregion"></td>
+                                </tr>
+                            </tbody>
                         </table>
                         <!--<p>Sovereignity: <span id="forwardOpenCageSovereign"></span></p>-->
                     </div>
@@ -154,7 +114,7 @@
             <!-- Modal content-->
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 id="weatherModalTitle" class="modal-title">Weather for <span id="weatherCity" class="modal-title"></span>, <span id="weatherCountry" class="modal-title"> </h4>
+                    <h4 id="weatherModalTitle" class="modal-title">Weather</h4>
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
                 <div class="modal-body">
@@ -164,81 +124,47 @@
                             <div id="weather-icon-container">
                                 <img id="weatherIcon" />
                             </div>
+                            <br />
+                            <table class="table table-sm table">
 
-                            <table>
-
-                                <tr>
-                                    <td align="right">
-                                        Temperature:
-                                    </td>
-                                    <td class="temp" id="txtTemp">
-                                    </td>
-
-                                </tr>
-
-                                <tr>
-                                    <td align="right">
-                                        Feels like:
-                                    </td>
-                                    <td class="temp" id="txtFeelsLike">
-                                    </td>
-
-                                </tr>
-
-                                <tr>
-                                    <td align="right">
-                                        Min temperature:
-                                    </td>
-                                    <td class="temp" id="txtTempMin">
-                                    </td>
-
-                                </tr>
-
-                                <tr>
-                                    <td align="right">
-                                        Max temperature:
-                                    </td>
-                                    <td class="temp" id="txtTempMax">
-                                    </td>
-
-                                </tr>
-
-                                <tr>
-                                    <td align="right">
-                                        Air pressure:
-                                    </td>
-                                    <td class="pressure" id="txtPressure">
-                                    </td>
-
-                                </tr>
-                                <tr>
-                                    <td align="right">
-                                        Humidity:
-                                    </td>
-                                    <td class="humid" id="txtHumidity">
-                                    </td>
-
-                                </tr>
-                                <tr>
-                                    <td align="right">
-                                        Wind speed:
-                                    </td>
-                                    <td class="speedM" id="txtWindSpeed">
-                                    </td>
-
-                                </tr>
-                                <tr>
-                                    <td align="right">
-                                        Wind direction:
-                                    </td>
-                                    <td id="txtWindDirection" height="20px" width="20px">
-                                        <div id="windContainer" height="20px" width="20px">
-                                            <img id="windDirection" src="libs/images/wind.png" />
-                                        </div>
-                                    </td>
-
-                                </tr>
-
+                                <tbody>
+                                    <tr>
+                                        <th scope="row">Temperature:</th>
+                                        <td colspan="2" class="temp" id="txtTemp"></td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Feels like:</th>
+                                        <td colspan="2" class="temp" id="txtFeelsLike"></td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Min temperature:</th>
+                                        <td colspan="2" class="temp" id="txtTempMin"></td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Max temperature:</th>
+                                        <td colspan="2" class="temp" id="txtTempMax"></td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Air pressure:</th>
+                                        <td colspan="2" class="pressure" id="txtPressure"></td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Humidity:</th>
+                                        <td colspan="2" class="humid" id="txtHumidity"></td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Wind speed:</th>
+                                        <td colspan="2" class="speedM" id="txtWindSpeed"></td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Wind direction:</th>
+                                        <td colspan="2" id="txtWindDirection" height="20px" width="20px">
+                                            <div id="windContainer" height="20px" width="20px">
+                                                <img id="windDirection" src="libs/images/wind.png" />
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
                             </table>
 
                         </div>
@@ -259,13 +185,16 @@
             <!-- Modal content-->
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 id="exchangeModalTitle" class="modal-title">ForEx details for <span id="baseCurrency" class="modal-title"></span></h4>
+                    <h4 id="exchangeModalTitle" class="modal-title">Foreign exchange details for <span id="baseCurrencyName" class="modal-title"></span> (<span id="baseCurrencySign" class="modal-title"></span>)</h4>
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
                 <div class="modal-body contentEX">
-                    <div id="txtExchange">
-                    </div>
+                    <table class="table table-hover">
+                        <tbody id="txtExchange">
+                        </tbody>
+                    </table>
                 </div>
+
                 <div class="modal-footer">
                     <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
                 </div>
@@ -273,19 +202,44 @@
 
         </div>
     </div>
+    <!--News modal-->
+    <div id="myModalNews" class="modal fade" role="dialog">
+        <div class="modal-dialog">
 
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 id="newsModalTitle" class="modal-title">News</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body contentNews">
+                    <table class="table table-hover table-success">
+                        <tbody id="newsList">
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- JavaScript -->
 
 
     <script type="application/javascript" src="libs/vendors/jquery-2.2.3.min.js"></script>
     <script type="application/javascript" src="libs/js/preloader.js"></script>
+    <script type="application/javascript" src="libs/vendors/spin/dist/spin.js"></script>
+    <script type="application/javascript" src="libs/vendors/leaflet.spin.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <script src="libs/leaflet/leaflet.js"></script>
     <script src="libs\vendors\leaflet-providers.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/leaflet-easybutton@2/src/easy-button.js"></script>
     <script src="libs\leaflet\extraMarkers\Leaflet.ExtraMarkers\dist\js\leaflet.extra-markers.min.js"></script>
+    <script src="libs\vendors\markerCluster\dist\leaflet.markercluster-src.js"></script>
     <script type="application/javascript" src="libs/js/trialPage4.js"></script>
-
+    <!--<script type="module" src="libs/vendors/spin/spin.js"></script>-->
 </body>
 </html>
