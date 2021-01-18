@@ -1,25 +1,37 @@
 <?php
 
-$borders = file_get_contents("../vendors/countryBorders.geo.json");
+    $executionStartTime = microtime(true);
 
-$decode = json_decode($borders,true);
+    $countryData = json_decode(file_get_contents("../vendors/countryBorders.geo.json"), true);
 
-//var_dump($decode['features']);
-asort($decode['features']);
+    $country = [];
 
-$options = "";
+    foreach ($countryData['features'] as $feature) {
 
-foreach($decode['features'] as $country) {
-	$options .= "<option value=\"".$country['properties']['iso_a3']."\">".$country['properties']['name']."</option>";
-}
+        $temp = null;
 
-	$output['status']['code'] = "200";
-	$output['status']['name'] = "ok";
-	$output['status']['description'] = "mission saved";
-	$output['data'] = $options;
-	
-	header('Content-Type: application/json; charset=UTF-8');
+        $temp['code'] = $feature["properties"]['iso_a2'];
 
-	echo json_encode($output); 
+        $temp['name'] = $feature["properties"]['name'];
+
+        array_push($country, $temp);
+
+    }
+
+    usort($country, function ($item1, $item2) {
+
+        return $item1['name'] <=> $item2['name'];
+
+    });
+
+   $output['status']['code'] = "200";
+   $output['status']['name'] = "ok";
+   $output['status']['description'] = "success";
+   $output['status']['executedIn'] = intval((microtime(true) - $executionStartTime) * 1000) . " ms";
+   $output['data'] = $country;
+
+    header('Content-Type: application/json; charset=UTF-8');
+
+    echo json_encode($output);
 
 ?>
