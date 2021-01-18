@@ -16,13 +16,18 @@ $('window').ready(function () {
 
 			console.log("countries2");
 
-			let options = '';
+			$('#countrySelect').html('');
 
-			$.each(result.data.countries, function (index, country) {
-				options += '<option value="' + country[1] + '">' + country[0] + '</option>'
-			});
+			$.each(result.data, function (index) {
 
-			$('#countries').html(options);
+				$('#countrySelect').append($("<option>", {
+
+					value: result.data[index].code,
+
+					text: result.data[index].name
+
+				}));
+			}); 
 		},
 		error: function (jqXHR, textStatus, errorThrown) {
 			console.log("countriesError");
@@ -91,6 +96,10 @@ $('#mapid').html("<div id='map' style='width: 100%; height: 100%;'></div>");
 var osmUrl = 'https://stamen-tiles-{s}.a.ssl.fastly.net/terrain/{z}/{x}/{y}{r}.png',
 	osmAttribution = 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> & mdash; Map data & copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
 osmLayer = new L.TileLayer(osmUrl, { maxZoom: 18, attribution: osmAttribution });
+
+let overlayMaps = {};
+
+//let layerscontrol = new L.control.layers(null, overlayMaps).addTo(map);
 
 var map = new L.Map('map');
 var marker = null;
@@ -207,12 +216,6 @@ function addCities(cities, iso) {
 		"Nearby foreign cities": foreignCities
 	};
 
-
-	//if (layerscontrol) {
-	//	layerscontrol.remove();
-	//} 
-
-	let layerscontrol = new L.control.layers(null, overlayMaps).addTo(map);
 
 	var foreignCityMarker = L.ExtraMarkers.icon({
 		shape: 'star',
@@ -356,7 +359,7 @@ function borderBounds(object, region) {
 
 //country selection
 
-$("#countries").on("change", newCountrySelection);
+$("#countrySelect").on("change", newCountrySelection);
 
 function newCountrySelection(event) {
 	selectDisplay(event.target.value);
@@ -564,10 +567,10 @@ function displayInfo(result) {
 	$.each(result.data.covid.features, function (index, item) {
 		if (item.attributes.ISO3 == iso3) {
 			$('#covidCountry').html(covidCountry);
-			$('#covidActive').html(item.attributes.Active);
-			$('#covidDeaths').html(item.attributes.Deaths);
-			$('#covidConfirmed').html(item.attributes.Confirmed);
-			$('#covidRecovered').html(item.attributes.Recovered);
+			$('#covidActive').html(item.attributes.Active.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+			$('#covidDeaths').html(item.attributes.Deaths.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+			$('#covidConfirmed').html(item.attributes.Confirmed.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+			$('#covidRecovered').html(item.attributes.Recovered.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
         }
 	})
 
